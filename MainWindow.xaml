@@ -1,0 +1,210 @@
+﻿<Window x:Class="MemoryManage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MemoryManage" d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="MemoryManage" Height="600" Width="1200" FontSize="14" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding AddPage}" IsEnabled="{Binding ButtonEnabled}" Grid.Column="0" Content="增加页面" Margin="50 30"/>
+            <Button Command="{Binding DeletePage}" IsEnabled="{Binding ButtonEnabled}" Grid.Column="1" Content="减少页面" Margin="50 30"/>
+            <Button Command="{Binding AccelerateRun}" Grid.Column="2" Content="加速运行" Margin="50 30"/>
+            <Grid Grid.Column="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="缺页次数：" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label Grid.Column="1" Content="{Binding PageFaultTimes}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Column="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="缺页率：" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label Grid.Column="1" Content="{Binding PageFaultRate}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="8*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="10">
+                    <ItemsControl ItemsSource="{Binding Pages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Pid}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{Binding PageColor}"></TextBlock>
+                                    <TextBox Text="{Binding Vid}" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True"></TextBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Content="当前调入虚页号" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding NowInVirtualPage}" Grid.Row="1" VerticalAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" IsReadOnly="True" Width="100" Height="30"></TextBox>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Content="当前调出虚页号" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding NowOutVirtualPage}" Grid.Row="1" VerticalAlignment="Center" VerticalContentAlignment="Center" TextAlignment="Center" IsReadOnly="True" Width="100" Height="30"></TextBox>
+                </Grid>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Content="实页栈  /  实页队列" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding PageStack}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Pid}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBox Text="{Binding Vid}" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True"></TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="2">
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Horizontal">
+                        <ItemsControl ItemsSource="{Binding PageSnapshot}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"></UniformGrid>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel>
+                                            <ItemsControl ItemsSource="{Binding SingleSnapshots}" BorderBrush="Black" BorderThickness="1 0 0 0">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Vid}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" MinWidth="20"></TextBlock>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding PageFault}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" MinWidth="20"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Column="3">
+                <Grid Margin="30 0 30 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="4*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Content="页面日志" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding Logs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <TextBox Text="{Binding Logs}" Grid.Column="0" VerticalAlignment="Center" BorderThickness="0"></TextBox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="选择算法" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ComboBox Grid.Column="1" SelectedIndex="{Binding SelectedIndex}" IsEnabled="{Binding ButtonEnabled}" VerticalContentAlignment="Center" Margin="30" >
+                <ComboBoxItem>LRU   最近最少使用</ComboBoxItem>
+                <ComboBoxItem>FIFO  先进先出</ComboBoxItem>
+            </ComboBox>
+            <Label Grid.Column="2" Content="设置虚页数" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Text="{Binding VirtualPageSize}" Grid.Column="3" VerticalAlignment="Center" TextAlignment="Center" Width="80"></TextBox>
+            <Button Command="{Binding RandomInput}" IsEnabled="{Binding ButtonEnabled}" Grid.Column="4" Content="随机生成" Margin="30"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Content="虚页引用序列" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <TextBox Text="{Binding InputSerial}" VerticalAlignment="Center"></TextBox>
+            </ScrollViewer>
+            <Button Grid.Column="2" Command="{Binding StartRun}" Content="{Binding StartRunText}" Margin="30"/>
+        </Grid>
+    </Grid>
+</Window>
